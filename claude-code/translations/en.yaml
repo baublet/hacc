@@ -1,0 +1,13 @@
+configuration:
+  anthropic_api_key:
+    name: Anthropic API Key
+    description: Your Anthropic API key for Claude Code access. Get one at console.anthropic.com
+  yolo_mode:
+    name: YOLO Mode
+    description: Auto-approve all commands without confirmation prompts. Powerful but use with caution.
+  default_model:
+    name: Default Model
+    description: The Claude model to use (sonnet is recommended for most tasks)
+  theme:
+    name: Theme
+    description: Terminal color theme

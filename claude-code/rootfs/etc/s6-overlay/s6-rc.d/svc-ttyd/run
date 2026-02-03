@@ -1,0 +1,30 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# HACC - ttyd web terminal service
+# ==============================================================================
+
+# Source environment configuration
+if [[ -f /data/claude-config/env.sh ]]; then
+    source /data/claude-config/env.sh
+fi
+
+THEME=$(bashio::config 'theme')
+
+# Set ttyd theme colors
+if [[ "${THEME}" == "light" ]]; then
+    THEME_ARGS=(-t backgroundColor=white -t foregroundColor=black)
+else
+    THEME_ARGS=(-t "backgroundColor=#1a1a2e" -t "foregroundColor=#eaeaea")
+fi
+
+bashio::log.info "Starting HACC web terminal on port 7681..."
+
+# Start ttyd - ingress handles the path routing
+exec ttyd \
+    --port 7681 \
+    --writable \
+    "${THEME_ARGS[@]}" \
+    -t fontSize=14 \
+    -t "fontFamily='Fira Code', 'Monaco', monospace" \
+    /usr/local/bin/claude-session

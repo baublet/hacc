@@ -1,0 +1,30 @@
+#!/command/with-contenv bash
+# shellcheck shell=bash
+# ==============================================================================
+# HACC - Claude Code session wrapper
+# Loads environment and starts Claude Code
+# ==============================================================================
+
+# Source environment configuration
+if [[ -f /data/claude-config/env.sh ]]; then
+    source /data/claude-config/env.sh
+fi
+
+# Set working directory to HA config
+cd /config || cd /
+
+# Build Claude Code arguments
+CLAUDE_ARGS=()
+
+# Add model if specified
+if [[ -n "${CLAUDE_CODE_MODEL:-}" ]]; then
+    CLAUDE_ARGS+=(--model "${CLAUDE_CODE_MODEL}")
+fi
+
+# Add YOLO mode flag if enabled
+if [[ "${CLAUDE_DANGEROUSLY_SKIP_PERMISSIONS:-}" == "true" ]]; then
+    CLAUDE_ARGS+=(--dangerously-skip-permissions)
+fi
+
+# Start Claude Code with arguments
+exec claude "${CLAUDE_ARGS[@]}" "$@"

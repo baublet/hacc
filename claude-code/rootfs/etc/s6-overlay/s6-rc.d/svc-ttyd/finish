@@ -1,0 +1,11 @@
+#!/command/execlineb -S1
+# ==============================================================================
+# HACC - ttyd finish script
+# Take down the S6 supervision tree when ttyd crashes unexpectedly
+# ==============================================================================
+
+# Only halt if exit code indicates unexpected failure (not 0 or SIGTERM)
+if { s6-test ${1} -ne 0 }
+if { s6-test ${1} -ne 256 }
+
+/run/s6/basedir/bin/halt

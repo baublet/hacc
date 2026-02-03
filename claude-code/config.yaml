@@ -1,0 +1,38 @@
+name: "HACC"
+description: "Home Assistant Claude Code - AI-powered coding assistant with web terminal access"
+version: "1.0.0"
+slug: "hacc"
+url: "https://github.com/baublet/hacc"
+arch:
+  - aarch64
+  - amd64
+init: false
+startup: application
+boot: auto
+ingress: true
+ingress_port: 7681
+ingress_stream: true
+panel_icon: "mdi:robot"
+panel_title: "Claude Code"
+homeassistant_api: true
+hassio_api: true
+
+map:
+  - config:rw
+  - ssl:ro
+  - addons:rw
+  - backup:rw
+  - share:rw
+  - media:rw
+
+options:
+  anthropic_api_key: ""
+  yolo_mode: true
+  default_model: "sonnet"
+  theme: "dark"
+
+schema:
+  anthropic_api_key: str
+  yolo_mode: bool
+  default_model: list(sonnet|opus|haiku)
+  theme: list(dark|light)

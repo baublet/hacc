@@ -1,0 +1,28 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+
+# Build artifacts
+*.log
+dist/
+build/
+
+# Secrets (don't commit API keys!)
+.env
+.env.local
+*.pem
+*.key
+
+# Add-on specific
+claude-code/icon.png
+claude-code/logo.png

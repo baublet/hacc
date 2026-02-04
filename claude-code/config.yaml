@@ -16,6 +16,7 @@ panel_icon: "mdi:robot"
 panel_title: "Claude Code"
 homeassistant_api: true
 hassio_api: true
+apparmor: false
 
 map:
   - config:rw

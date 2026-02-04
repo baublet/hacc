@@ -12,7 +12,12 @@ RUN apk add --no-cache \
     jq \
     ttyd \
     python3 \
-    py3-pip
+    py3-pip \
+    gosu
+
+# Create non-root user for Claude Code (YOLO mode requires non-root)
+RUN addgroup -g 1000 claude && \
+    adduser -u 1000 -G claude -h /home/claude -s /bin/bash -D claude
 
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code

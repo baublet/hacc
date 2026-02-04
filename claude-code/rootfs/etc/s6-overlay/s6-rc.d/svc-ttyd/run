@@ -21,10 +21,11 @@ fi
 bashio::log.info "Starting HACC web terminal on port 7681..."
 
 # Start ttyd - ingress handles the path routing
+# Use gosu to run as claude user (YOLO mode requires non-root)
 exec ttyd \
     --port 7681 \
     --writable \
     "${THEME_ARGS[@]}" \
     -t fontSize=14 \
     -t "fontFamily='Fira Code', 'Monaco', monospace" \
-    /usr/local/bin/claude-session
+    gosu claude /usr/local/bin/claude-session

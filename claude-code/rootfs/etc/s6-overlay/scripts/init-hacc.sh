@@ -10,6 +10,10 @@ bashio::log.info "Initializing HACC..."
 # Ensure data directories exist
 mkdir -p /data/sessions /data/claude-config /data/ssh
 
+# Set ownership to claude user (YOLO mode requires non-root)
+chown -R claude:claude /data/sessions /data/claude-config /data/ssh
+chown -R claude:claude /home/claude
+
 # Read configuration
 API_KEY=$(bashio::config 'anthropic_api_key')
 YOLO_MODE=$(bashio::config 'yolo_mode')
@@ -51,32 +55,38 @@ fi
 if [[ ! -f /data/ssh/id_ed25519 ]]; then
     bashio::log.info "Generating SSH keypair for HACC..."
     ssh-keygen -t ed25519 -f /data/ssh/id_ed25519 -N "" -C "hacc@homeassistant"
+    chown claude:claude /data/ssh/id_ed25519 /data/ssh/id_ed25519.pub
 fi
 
-mkdir -p /root/.ssh
-chmod 700 /root/.ssh
+# Set up claude user's SSH directory
+mkdir -p /home/claude/.ssh
+chmod 700 /home/claude/.ssh
 
 # Link SSH keys if they exist
 if [[ -f /data/ssh/id_ed25519 ]]; then
-    ln -sf /data/ssh/id_ed25519 /root/.ssh/id_ed25519
-    ln -sf /data/ssh/id_ed25519.pub /root/.ssh/id_ed25519.pub
-    chmod 600 /root/.ssh/id_ed25519
+    ln -sf /data/ssh/id_ed25519 /home/claude/.ssh/id_ed25519
+    ln -sf /data/ssh/id_ed25519.pub /home/claude/.ssh/id_ed25519.pub
+    chmod 600 /data/ssh/id_ed25519
 fi
 
 # Link known_hosts if it exists
 if [[ -f /data/ssh/known_hosts ]]; then
-    ln -sf /data/ssh/known_hosts /root/.ssh/known_hosts
+    ln -sf /data/ssh/known_hosts /home/claude/.ssh/known_hosts
 fi
 
 # Create Claude Code settings directory
-mkdir -p /root/.claude
+mkdir -p /home/claude/.claude
 
 # Link settings if they exist
 if [[ -f /data/claude-config/settings.json ]]; then
-    ln -sf /data/claude-config/settings.json /root/.claude/settings.json
+    ln -sf /data/claude-config/settings.json /home/claude/.claude/settings.json
 fi
 
-# Set git safe directory for /config
+# Set ownership for claude user home
+chown -R claude:claude /home/claude
+
+# Set git safe directory for /config (for both root and claude user)
 git config --global --add safe.directory /config
+gosu claude git config --global --add safe.directory /config
 
 bashio::log.info "HACC initialization complete!"

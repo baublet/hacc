@@ -77,10 +77,17 @@ fi
 # Create Claude Code settings directory
 mkdir -p /home/claude/.claude
 
-# Link settings if they exist
+# Link settings.json if it exists in persistent storage
 if [[ -f /data/claude-config/settings.json ]]; then
     ln -sf /data/claude-config/settings.json /home/claude/.claude/settings.json
 fi
+
+# Ensure .claude.json exists with onboarding complete (required to skip interactive prompts)
+# This file must be at ~/.claude.json, not ~/.claude/settings.json
+if [[ ! -f /data/claude-config/.claude.json ]]; then
+    echo '{"hasCompletedOnboarding": true}' > /data/claude-config/.claude.json
+fi
+ln -sf /data/claude-config/.claude.json /home/claude/.claude.json
 
 # Set ownership for claude user home
 chown -R claude:claude /home/claude

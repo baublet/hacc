@@ -10,26 +10,24 @@ if [[ -f /data/claude-config/env.sh ]]; then
     source /data/claude-config/env.sh
 fi
 
-# Debug: show environment is set
-echo "Starting Claude Code..."
-echo "API Key set: ${ANTHROPIC_API_KEY:+yes}"
-echo "Model: ${CLAUDE_CODE_MODEL:-default}"
+# Export for subprocesses
+export ANTHROPIC_API_KEY
+export CLAUDE_CODE_MODEL
+export CLAUDE_DANGEROUSLY_SKIP_PERMISSIONS
 
-# Set working directory to HA config
 cd /config || cd /
 
-# Build Claude Code arguments
-CLAUDE_ARGS=()
+echo "=== HACC Debug ==="
+echo "API Key set: ${ANTHROPIC_API_KEY:+yes}"
+echo "Model: ${CLAUDE_CODE_MODEL:-default}"
+echo "YOLO: ${CLAUDE_DANGEROUSLY_SKIP_PERMISSIONS:-false}"
+echo "Claude location: $(which claude)"
+echo "Node version: $(node --version)"
+echo ".claude.json exists: $(test -f ~/.claude.json && echo yes || echo no)"
+echo ".claude.json content: $(cat ~/.claude.json 2>/dev/null || echo 'N/A')"
+echo "=================="
+echo ""
+echo "Type 'claude' to start Claude Code manually"
+echo ""
 
-# Add model if specified
-if [[ -n "${CLAUDE_CODE_MODEL:-}" ]]; then
-    CLAUDE_ARGS+=(--model "${CLAUDE_CODE_MODEL}")
-fi
-
-# Add YOLO mode flag if enabled
-if [[ "${CLAUDE_DANGEROUSLY_SKIP_PERMISSIONS:-}" == "true" ]]; then
-    CLAUDE_ARGS+=(--dangerously-skip-permissions)
-fi
-
-# Start Claude Code with arguments
-exec claude "${CLAUDE_ARGS[@]}" "$@"
+exec bash

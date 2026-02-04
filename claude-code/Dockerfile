@@ -22,6 +22,11 @@ RUN addgroup -g 1000 claude && \
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code
 
+# Accept Claude Code terms (skip interactive prompts)
+RUN mkdir -p /home/claude/.claude && \
+    echo '{"hasCompletedOnboarding": true}' > /home/claude/.claude/settings.json && \
+    chown -R claude:claude /home/claude/.claude
+
 # Copy root filesystem
 COPY rootfs /
 

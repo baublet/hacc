@@ -10,6 +10,11 @@ if [[ -f /data/claude-config/env.sh ]]; then
     source /data/claude-config/env.sh
 fi
 
+# Debug: show environment is set
+echo "Starting Claude Code..."
+echo "API Key set: ${ANTHROPIC_API_KEY:+yes}"
+echo "Model: ${CLAUDE_CODE_MODEL:-default}"
+
 # Set working directory to HA config
 cd /config || cd /
 

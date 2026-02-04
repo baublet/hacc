@@ -1,6 +1,6 @@
 #include <tunables/global>
 
-profile hacc flags=(attach_disconnected,mediate_deleted) {
+profile e975af66_hacc flags=(attach_disconnected,mediate_deleted) {
   #include <abstractions/base>
 
   # Allow all capabilities for full access
